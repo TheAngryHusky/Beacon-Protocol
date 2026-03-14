@@ -1,46 +1,32 @@
-import { Box, Container, Flex, Heading } from "@radix-ui/themes";
-import { WalletStatus } from "./WalletStatus";
 import { abbreviateAddress, useConnection } from "@evefrontier/dapp-kit";
 import { useCurrentAccount } from "@mysten/dapp-kit-react";
+import { BeaconDashboard } from "./BeaconDashboard";
 
 function App() {
-  /**
-   * STEP 2 — Wallet connection
-   *
-   * useConnection() (@evefrontier/dapp-kit) → handleConnect, handleDisconnect;
-   * isConnected, walletAddress, hasEveVault. useCurrentAccount()
-   * (@mysten/dapp-kit-react) → account (e.g. account.address) for UI. abbreviateAddress()
-   * (@evefrontier/dapp-kit) for display.
-   */
   const { handleConnect, handleDisconnect } = useConnection();
   const account = useCurrentAccount();
 
   return (
-    <Box style={{ padding: "20px" }}>
-      <Flex
-        position="sticky"
-        px="4"
-        py="2"
-        direction="row"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <Heading>EVE Frontier dApp Starter Template</Heading>
-
-        {/* STEP 2 — Connect/disconnect; show abbreviated address in header. */}
+    <div>
+      <header className="app-header">
+        <div>
+          <div className="header-logo">
+            <span>◈</span> BEACON PROTOCOL
+          </div>
+          <div className="header-sub">EVE Frontier · Rescue Network</div>
+        </div>
         <button
-          onClick={() =>
-            account?.address ? handleDisconnect() : handleConnect()
-          }
+          className={`connect-btn ${account ? "connected" : "disconnected"}`}
+          onClick={() => account?.address ? handleDisconnect() : handleConnect()}
         >
-          {account ? abbreviateAddress(account?.address) : "Connect Wallet"}
+          {account ? `✓ ${abbreviateAddress(account.address)}` : "Connect Wallet"}
         </button>
-      </Flex>
-      {/* STEP 3 — Same hooks (useConnection, useCurrentAccount) drive WalletStatus; state stays in sync. */}
-      <WalletStatus />
-    </Box>
+      </header>
+
+      <main className="main-content">
+        <BeaconDashboard walletAddress={account?.address} />
+      </main>
+    </div>
   );
 }
 

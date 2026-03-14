@@ -1,70 +1,375 @@
-/* Design tokens */
 :root {
-  --color-background: #0B0B0B;
-  --color-text: #FAFAE5;
-  --color-text-muted: rgba(250, 250, 229, 0.9);
-  --color-border: rgba(250, 250, 229, 0.5);
-  --color-button-background: rgba(250, 250, 229, 0.1);
-
+  --bg:           #0B0B0B;
+  --bg-card:      #111111;
+  --bg-card-2:    #161616;
+  --text:         #FAFAE5;
+  --text-muted:   rgba(250, 250, 229, 0.45);
+  --text-dim:     rgba(250, 250, 229, 0.25);
+  --border:       rgba(250, 250, 229, 0.12);
+  --border-bright:rgba(250, 250, 229, 0.3);
+  --orange:       #E8630A;
+  --orange-bright:#FF7A1A;
+  --orange-dim:   rgba(232, 99, 10, 0.15);
+  --green:        #4CAF50;
+  --green-dim:    rgba(76, 175, 80, 0.15);
+  --gold:         #C8A84B;
+  --silver:       #9E9E9E;
+  --bronze:       #8D6E63;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: "Favorit", "ABC Favorit Mono", monospace;
   font-weight: 300;
-  font-size: 16px;
-  line-height: 150%;
-  letter-spacing: -0.02em;
-  color: var(--color-text);
-  background-color: var(--color-background);
-  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  background-color: var(--bg);
+  min-height: 100vh;
 }
 
-/* Header (e.g. Wallet Status) */
 h1, h2, h3, h4, h5, h6 {
   font-family: "Frontier Disket Mono", "Fronter Disket Mono", monospace;
-  font-weight: 400; /* Regular */
-  color: var(--color-text);
-  line-height: 120%;
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.2;
 }
 
-h3 {
-  font-size: 2rem;
+/* Subtle scanline */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0,0,0,0.04) 3px,
+    rgba(0,0,0,0.04) 4px
+  );
+  pointer-events: none;
+  z-index: 999;
 }
 
-/* Body text inheritance for containers */
-p, span, label, .body-text {
-  font-family: "Favorit", "ABC Favorit Mono", "Favorit Mono", monospace;
-  font-weight: 300;
-  font-size: 1rem;
-  margin: 0 0 8px 0;
-  letter-spacing: -0.02em;
-  color: var(--color-text);
+/* ── Header ─────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 36px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(11, 11, 11, 0.95);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-/* Dotted / subtle borders (Punktalína) */
-.border-subtle {
-  border-color: var(--color-border);
-}
-
-button {
+.header-logo {
   font-family: "Frontier Disket Mono", monospace;
-  font-weight: 300;
-  font-size: 16px;
-  line-height: 150%;
-  letter-spacing: -0.02em;
-  background-color: var(--color-button-background);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  font-size: 17px;
+  color: var(--text);
+  letter-spacing: 0.08em;
 }
 
-.divider {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid var(--color-border);
-  height: 1px;
+.header-logo span {
+  color: var(--orange);
+}
+
+.header-sub {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+/* ── Connect button ──────────────────────────── */
+.connect-btn {
+  font-family: "Frontier Disket Mono", monospace;
+  font-size: 12px;
+  padding: 9px 18px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.connect-btn.disconnected {
+  background: var(--orange-dim);
+  border: 1px solid rgba(232, 99, 10, 0.4);
+  color: var(--orange-bright);
+}
+
+.connect-btn.connected {
+  background: var(--green-dim);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  color: var(--green);
+}
+
+.connect-btn:hover {
+  filter: brightness(1.25);
+}
+
+/* ── Main layout ─────────────────────────────── */
+.main-content {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+/* ── Hero ────────────────────────────────────── */
+.hero {
+  text-align: center;
+  padding: 20px 0 8px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 36px;
+}
+
+.hero-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 12px;
+}
+
+.hero-title {
+  font-family: "Frontier Disket Mono", monospace;
+  font-size: 48px;
+  color: var(--text);
+  letter-spacing: 0.04em;
+  margin-bottom: 14px;
+}
+
+.hero-title span {
+  color: var(--orange);
+}
+
+.hero-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  max-width: 440px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ── Section heading ─────────────────────────── */
+.section-heading {
+  font-family: "Frontier Disket Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+
+/* ── Stat cards ──────────────────────────────── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.stat-card {
+  background: var(--bg-card);
+  padding: 22px 20px;
+  position: relative;
+}
+
+.stat-card:hover {
+  background: var(--bg-card-2);
+}
+
+.stat-label {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
+.stat-value {
+  font-family: "Frontier Disket Mono", monospace;
+  font-size: 36px;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.stat-value.orange { color: var(--orange); }
+.stat-value.green  { color: var(--green); }
+.stat-value.gold   { color: var(--gold); }
+
+.stat-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ── Online pulse ────────────────────────────── */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+.online-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2.5s ease-in-out infinite;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* ── Beacon card ─────────────────────────────── */
+.beacon-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.beacon-name {
+  font-family: "Frontier Disket Mono", monospace;
+  font-size: 15px;
+  color: var(--text);
+  letter-spacing: 0.05em;
+}
+
+.beacon-id {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: "Frontier Disket Mono", monospace;
+  margin-top: 4px;
+}
+
+.beacon-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+.badge-online {
+  font-family: "Frontier Disket Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--green);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  background: var(--green-dim);
+  padding: 5px 12px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── Leaderboard ─────────────────────────────── */
+.leaderboard-card {
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  overflow: hidden;
+}
+
+.leaderboard-header {
+  display: grid;
+  grid-template-columns: 52px 1fr 170px 70px;
+  padding: 10px 20px;
+  background: rgba(250, 250, 229, 0.03);
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.leaderboard-row {
+  display: grid;
+  grid-template-columns: 52px 1fr 170px 70px;
+  padding: 14px 20px;
+  align-items: center;
+  border-bottom: 1px solid rgba(250, 250, 229, 0.04);
+  transition: background 0.12s;
+}
+
+.leaderboard-row:last-child { border-bottom: none; }
+.leaderboard-row:hover { background: rgba(250, 250, 229, 0.03); }
+.leaderboard-row.is-me  { background: rgba(232, 99, 10, 0.06); }
+
+.rank-number {
+  font-family: "Frontier Disket Mono", monospace;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.pilot-address {
+  font-family: "Frontier Disket Mono", monospace;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.you-tag {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--orange);
+  margin-left: 8px;
+  text-transform: uppercase;
+}
+
+.rank-badge {
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.rep-score {
+  font-family: "Frontier Disket Mono", monospace;
+  font-size: 18px;
+  text-align: right;
+}
+
+/* ── Empty state ─────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 64px 20px;
+  color: var(--text-muted);
+}
+
+.empty-icon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+
+.empty-title {
+  font-family: "Frontier Disket Mono", monospace;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.empty-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  max-width: 320px;
+  margin: 0 auto;
+  line-height: 1.6;
 }

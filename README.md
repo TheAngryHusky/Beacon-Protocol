@@ -1,43 +1,87 @@
-# Builder Scaffold
+# Beacon Protocol
 
-Templates and tools for building on EVE Frontier.
+> On-chain rescue network for EVE Frontier. Donate supplies to emergency beacons, earn permanent reputation on Sui blockchain. Stranded pilots withdraw what they need. No admins, no servers — just contracts, players, and proof of who helped build civilization.
 
-## Prerequisites
+Built for the **EVE Frontier × Sui Hackathon 2026**.
 
-- [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-- [Docker](https://docs.docker.com/get-docker/) (for Docker path) **or** [Sui CLI](https://docs.sui.io/guides/developer/getting-started) + Node.js (for Host path)
+---
 
-## Quickstart
+## What it does
 
-**1. Clone the repo**:
+Beacon Protocol turns Smart Storage Units (SSUs) into community rescue beacons.
 
-```bash
-mkdir -p workspace && cd workspace
-git clone https://github.com/evefrontier/builder-scaffold.git
-cd builder-scaffold
+- **Donate** supplies → earn permanent reputation points on Sui
+- **Withdraw** emergency items when stranded (up to 10 per visit)
+- **Leaderboard** tracks top contributors with rank titles: Explorer → Helper → Guardian → Pillar of Civilization
+
+All state lives on-chain. No central server, no admin control.
+
+---
+
+## How it works
+
+The project has two parts:
+
+### Smart Contracts (`move-contracts/storage_unit_extension`)
+
+A Move extension for EVE Frontier SSUs with two core functions:
+
+- `donate()` — deposit an item into the beacon, earn 5 REP
+- `emergency_withdraw()` — withdraw up to the configured limit per visit
+
+Reputation is stored in a shared `BeaconState` object as a `Table<address, u64>` on Sui.
+
+### Web Dashboard (`dapps/`)
+
+A React + Vite frontend that reads live on-chain state and displays:
+
+- Network stats (active beacons, total helpers, your reputation)
+- Active beacon list
+- Reputation leaderboard
+
+---
+
+## Tech Stack
+
+- **Smart contracts:** Move (Sui), EVE Frontier world-contracts
+- **Frontend:** React, Vite, @evefrontier/dapp-kit
+- **Chain:** Sui (localnet / Stillness)
+
+---
+
+## Project Structure
+
+```
+beacon-protocol/
+├── move-contracts/
+│   └── storage_unit_extension/
+│       └── sources/
+│           ├── beacon_protocol.move   # Core logic
+│           └── config.move            # Auth + config
+├── dapps/
+│   └── src/
+│       ├── App.tsx
+│       ├── BeaconDashboard.tsx
+│       └── Leaderboard.tsx
+└── ts-scripts/
+    └── storage_unit_extension/        # Deploy + configure scripts
 ```
 
-**2. Follow one flow** (world deploy → build custom contract → interact):
+---
 
-| Path | When to use |
-|------|--------------|
-| **[Docker](./docs/builder-flow-docker.md)** | No Sui/Node on host; run everything in a container (local or testnet). Recommended for local testing  |
-| **[Host](./docs/builder-flow-host.md)** | Sui CLI + Node.js on your machine; target local or testnet. |
-| **[Building on an existing world](./docs/building-on-existing-world.md)** | World already deployed (e.g. shared server, live game); you don't deploy the world yourself. *(WIP – guide coming soon; use Docker/Host flows for now.)* |
+## Reputation Ranks
 
-By the end you’ll have a deployed world (or use an existing one), a published custom contract (e.g. `smart_gate_extension`), and scripts that call it.
+| Score | Rank |
+|-------|------|
+| 0–9 | Explorer |
+| 10–99 | Helper |
+| 100–999 | Guardian |
+| 1000+ | Pillar of Civilization |
 
-## What's in this repo
+---
 
-| Area | Purpose |
-|------|---------|
-| [docker/](./docker/readme.md) | Dev container (Sui CLI + Node.js) — used by the Docker flow. |
-| [move-contracts/](./move-contracts/readme.md) | Custom Smart Assembly examples (e.g. [smart_gate_extension](./move-contracts/smart_gate_extension/)); build & publish. |
-| [ts-scripts/](./ts-scripts/readme.md) | TypeScript scripts to call your contracts; run after publishing. |
-| [setup-world/](./setup-world/readme.md) | What “deploy world” does and what gets created (world flow steps are in the flow guides). |
-| [dapps/](./dapps/readme.md) | Reference dApp template (optional next step). |
-| [zklogin/](./zklogin/readme.md) | zkLogin CLI for OAuth-based signing (optional). |
+## Hackathon Submission
 
-## Contributing
-
-Contributions welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) and open an issue or feature request before submitting PRs.
+**Event:** EVE Frontier × Sui Hackathon 2026
+**Category:** Builder mod / Smart Assembly extension
+**Submitted via:** deepsurge.xyz/evefrontier2026

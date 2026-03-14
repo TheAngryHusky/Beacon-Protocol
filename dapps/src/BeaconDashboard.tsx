@@ -17,7 +17,8 @@ interface Props {
 }
 
 export function BeaconDashboard({ walletAddress }: Props) {
-  const client = useCurrentClient();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const client = useCurrentClient() as any;
 
   const { data: repEntries, isLoading: repLoading } = useQuery({
     queryKey: ["beacon-reputation", BEACON_STATE_ID],
